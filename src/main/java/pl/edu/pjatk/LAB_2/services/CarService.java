@@ -25,4 +25,10 @@ public class CarService {
     public Car getCar(int id){
         return this.carList.get(id);
     }
+    public void delete(int id){
+        this.carList.remove(id);
+    }
+    public void update(int id, Car car){
+        this.carList.set(id, car);
+    }
 }
