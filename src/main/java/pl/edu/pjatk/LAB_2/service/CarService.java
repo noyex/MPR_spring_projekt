@@ -13,11 +13,12 @@ import java.util.Optional;
 public class CarService {
     List<Car> carList = new ArrayList<>();
 
-
+    private StringUtilsService stringUtilsService;
     private CarRepository repository;
 
-    public CarService(CarRepository repository) {
+    public CarService(CarRepository repository, StringUtilsService stringUtilsService) {
         this.repository = repository;
+        this.stringUtilsService = stringUtilsService;
         this.repository.save(new Car("RS6", "black"));
         this.repository.save(new Car("RS7", "red"));
         this.repository.save(new Car("R8", "yellow"));
@@ -27,13 +28,25 @@ public class CarService {
      return this.repository.findByModel(model);
     }
     public List<Car> getCarList() {
-        return (List<Car>) this.repository.findAll();
+        List<Car> cars = (List<Car>) this.repository.findAll(); ;
+        for (Car car : cars) {
+            car.setModel(stringUtilsService.toProperCase(car.getModel()));
+            car.setColor(stringUtilsService.toProperCase(car.getColor()));
+        }
+        return cars;
     }
     public void add(@RequestBody Car car){
+        car.setModel(stringUtilsService.toProperCase(car.getModel()));
+        car.setColor(stringUtilsService.toProperCase(car.getColor()));
         this.repository.save(car);
     }
-    public Optional<Car> getCar(Long id){
-        return this.repository.findById(id);
+    public Optional<Car> getCar(Long id) {
+        Optional<Car> carOptional = this.repository.findById(id);
+        carOptional.ifPresent(car -> {
+            car.setModel(stringUtilsService.toProperCase(car.getModel()));
+            car.setColor(stringUtilsService.toProperCase(car.getColor()));
+        });
+        return carOptional;
     }
     public void delete(Long id){
         this.repository.deleteById(id);
@@ -43,8 +56,8 @@ public class CarService {
 
         if(existingCarOptional.isPresent()){
             Car existingCar = existingCarOptional.get();
-            existingCar.setModel(car.getModel());
-            existingCar.setColor(car.getColor());
+            existingCar.setModel(stringUtilsService.toProperCase(car.getModel()));
+            existingCar.setColor(stringUtilsService.toProperCase(car.getColor()));
             this.repository.save(existingCar);
         }else {
             throw new RuntimeException("Samochód o ID " + car.getId() + " nie istnieje.");
