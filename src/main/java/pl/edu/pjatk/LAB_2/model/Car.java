@@ -10,15 +10,12 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private int charToIntSum;
     private String model;
     private String color;
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Car(){}
@@ -43,4 +40,20 @@ public class Car {
     public void setColor(String color) {
         this.color = color;
     }
+
+    public int getCharToIntSum() {
+        charToIntSum = 0;
+        for(int i = 0; i < model.length(); i++){
+            charToIntSum += model.toLowerCase().charAt(i);
+        }
+        for(int i = 0; i < color.length(); i++){
+            charToIntSum += color.toLowerCase().charAt(i);
+        }
+        return charToIntSum;
+    }
+
+    public void setCharToIntSum(int charToIntSum) {
+        this.charToIntSum = charToIntSum;
+    }
+
 }

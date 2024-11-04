@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface CarRepository extends CrudRepository<Car, Long> {
-    public List<Car> findByModel(String model);
+    List<Car> findByModel(String model);
+    List<Car> findByCharToIntSum(int charToIntSum);
 }

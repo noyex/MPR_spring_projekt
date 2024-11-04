@@ -16,8 +16,9 @@ public class StringUtilsServiceTest {
         stringUtilsService = new StringUtilsService();
     }
 
+    //test toProperCase
     @Test
-    public void toProperCaseSuccess() {
+    public void testToProperCaseSuccess_RandomCases() {
         String input = "tEstStrIng";
         String expected = "Teststring";
 
@@ -25,19 +26,8 @@ public class StringUtilsServiceTest {
 
         assertEquals(expected, actual);
     }
-
     @Test
-    public void upperCaseSuccess() {
-        String input = "testString";
-        String expected = "TESTSTRING";
-
-        String actual = stringUtilsService.toUpperCase(input);
-
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void stringIsEmpty() {
+    public void testToProperCaseFailure_EmptyString () {
         String input = "";
         String expected = "";
 
@@ -45,10 +35,61 @@ public class StringUtilsServiceTest {
 
         assertEquals(expected, actual);
     }
-
     @Test
-    public void toProperCaseNullInput() {
+    public void testToProperCase_NullInput() {
         String actual = stringUtilsService.toProperCase(null);
         assertNull(actual);
     }
+
+    //test toUpperCase
+    @Test
+    public void testToUpperCaseSuccess_RandomCases() {
+        String input = "tEstSTring";
+        String expected = "TESTSTRING";
+
+        String actual = stringUtilsService.toUpperCase(input);
+
+        assertEquals(expected, actual);
+    }
+    @Test
+    public void testToUpperCaseFailure_EmptyString() {
+        String input = "";
+        String expected = "";
+
+        String actual = stringUtilsService.toUpperCase(input);
+
+        assertEquals(expected, actual);
+    }
+    @Test
+    public void testToUpperCase_NullInput() {
+        String actual = stringUtilsService.toUpperCase(null);
+        assertNull(actual);
+    }
+
+    //test toLowerCase
+    @Test
+    public void testToLowerCaseSuccess_RandomCases() {
+        String input = "tEstSTring";
+        String expected = "teststring";
+
+        String actual = stringUtilsService.toLowerCase(input);
+
+        assertEquals(expected, actual);
+    }
+    @Test
+    public void testToLowerCaseFailure_EmptyString() {
+        String input = "";
+        String expected = "";
+
+        String actual = stringUtilsService.toLowerCase(input);
+
+        assertEquals(expected, actual);
+    }
+    @Test
+    public void testToLowerCase_NullInput() {
+        String actual = stringUtilsService.toLowerCase(null);
+        assertNull(actual);
+    }
+
+    // dorobic Exceptions do StringUtils!!!
 }

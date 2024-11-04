@@ -9,6 +9,10 @@ public class StringUtilsService {
         return input != null ? input.toUpperCase() : null;
     }
 
+    public String toLowerCase(String input) {
+        return input != null ? input.toLowerCase() : null;
+    }
+
     public String toProperCase(String input) {
         if (input == null || input.isEmpty()) {
             return input;
