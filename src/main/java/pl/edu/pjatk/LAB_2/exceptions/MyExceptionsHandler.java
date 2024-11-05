@@ -22,5 +22,8 @@ public class MyExceptionsHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
-
+    @ExceptionHandler(value={StringUtilsWrongInputException.class})
+    public ResponseEntity<Object> handleWrongInput(StringUtilsWrongInputException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
 }
