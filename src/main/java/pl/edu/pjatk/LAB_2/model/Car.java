@@ -14,6 +14,7 @@ public class Car {
     private String model;
     private String color;
 
+
     public Long getId() {
         return id;
     }

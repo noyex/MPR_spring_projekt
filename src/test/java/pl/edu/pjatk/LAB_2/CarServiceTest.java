@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import pl.edu.pjatk.LAB_2.exceptions.CarAlreadyExistsException;
 import pl.edu.pjatk.LAB_2.exceptions.CarNotFoundExceptions;
@@ -13,6 +14,7 @@ import pl.edu.pjatk.LAB_2.repository.CarRepository;
 import pl.edu.pjatk.LAB_2.service.CarService;
 import pl.edu.pjatk.LAB_2.service.StringUtilsService;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.function.BooleanSupplier;
 
@@ -203,4 +205,41 @@ public class CarServiceTest {
         when(repository.findByCharToIntSum(792)).thenReturn(Collections.singletonList(car));
         assertThrows(CarAlreadyExistsException.class, () -> carService.checkIfCarExists(car));
     }
+
+    //generatePDF test
+    @Test
+    void testGeneratePDFSuccess_DoesNotThrowException() throws IOException {
+        Car car = new Car("carModel", "carColor");
+        Long carId = 1L;
+        Mockito.when(repository.findById(carId)).thenReturn(Optional.of(car));
+        byte[] pdfContent = carService.generatePDF(carId);
+        assertNotNull(pdfContent, "Generated PDF should not be null.");
+        assertTrue(pdfContent.length > 0, "Generated PDF should not be empty.");
+    }
+    @Test
+    void testGeneratePDF_CarNotFound_ThrowsException() {
+        Long carId = 1L;
+
+        Mockito.when(repository.findById(carId)).thenReturn(Optional.empty());
+
+        assertThrows(CarNotFoundExceptions.class, () -> carService.generatePDF(carId));
+    }
+    @Test
+    void testGeneratePDF_VariousCarData() throws IOException {
+        Car car1 = new Car("ModelX", "Red");
+        Car car2 = new Car("ModelY", "Blue");
+
+        Long carId1 = 1L;
+        Long carId2 = 2L;
+
+        Mockito.when(repository.findById(carId1)).thenReturn(Optional.of(car1));
+        Mockito.when(repository.findById(carId2)).thenReturn(Optional.of(car2));
+
+        byte[] pdfContent1 = carService.generatePDF(carId1);
+        byte[] pdfContent2 = carService.generatePDF(carId2);
+
+        assertNotNull(pdfContent1);
+        assertNotNull(pdfContent2);
+    }
+
 }
