@@ -1,29 +1,51 @@
 package pl.edu.pjatk.LAB_2.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
 
 @Entity
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private int charToIntSum;
+
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    @JsonProperty("brand")
+    @JsonIgnoreProperties("id")
+    private Brand brand;
+
     private String model;
     private String color;
+    private double engine;
+    private int horsePower;
 
+    @Column(name = "car_year")
+    private int year;
+
+    private boolean postAccident;
+    private int charToIntSum;
+
+
+    public Car(){}
+
+    public Car(String model, String color, Brand brand, double engine, int year, boolean postAccident, int horsePower) {
+        this.model = model;
+        this.color = color;
+        this.brand = brand;
+        this.engine = engine;
+        this.horsePower = horsePower;
+        this.year = year;
+        this.postAccident = postAccident;
+    }
 
     public Long getId() {
         return id;
     }
 
-    public Car(){}
-
-    public Car(String model, String color) {
-        this.model = model;
-        this.color = color;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getModel() {
@@ -40,6 +62,46 @@ public class Car {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public double getEngine() {
+        return engine;
+    }
+
+    public void setEngine(double engine) {
+        this.engine = engine;
+    }
+
+    public int getHorsePower() {
+        return horsePower;
+    }
+
+    public void setHorsePower(int horsePower) {
+        this.horsePower = horsePower;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public boolean isPostAccident() {
+        return postAccident;
+    }
+
+    public void setPostAccident(boolean postAccident) {
+        this.postAccident = postAccident;
+    }
+
+    public Brand getBrand() {
+        return brand;
+    }
+
+    public void setBrand(Brand brand) {
+        this.brand = brand;
     }
 
     public int getCharToIntSum() {

@@ -9,7 +9,9 @@ import org.springframework.stereotype.Component;
 import pl.edu.pjatk.LAB_2.exceptions.CarAlreadyExistsException;
 import pl.edu.pjatk.LAB_2.exceptions.CarNotFoundExceptions;
 import pl.edu.pjatk.LAB_2.exceptions.CarWrongDataInputException;
+import pl.edu.pjatk.LAB_2.model.Brand;
 import pl.edu.pjatk.LAB_2.model.Car;
+import pl.edu.pjatk.LAB_2.repository.BrandRepository;
 import pl.edu.pjatk.LAB_2.repository.CarRepository;
 
 import java.awt.*;
@@ -23,14 +25,19 @@ public class CarService {
 
     private final StringUtilsService stringUtilsService;
     private final CarRepository repository;
+    private final BrandRepository brandRepository;
 
-    public CarService(CarRepository repository, StringUtilsService stringUtilsService) {
+    public CarService(CarRepository repository, StringUtilsService stringUtilsService, BrandRepository brandRepository) {
         this.repository = repository;
         this.stringUtilsService = stringUtilsService;
+        this.brandRepository = brandRepository;
 
-        add(new Car("RS6", "black"));
-        add(new Car("RS7", "red"));
-        add(new Car("R8", "yellow"));
+        add(new Car("RS6", "black", getOrCreateBrand("Audi"), 3.2, 2017, false, 670));
+    }
+
+    private Brand getOrCreateBrand(String brandName) {
+        Optional<Brand> brand = brandRepository.findByName(brandName);
+        return brand.orElseGet(() -> brandRepository.save(new Brand(brandName)));
     }
 
     public List<Car> getCarByModel(String model) {
