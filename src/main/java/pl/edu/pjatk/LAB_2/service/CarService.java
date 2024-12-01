@@ -6,6 +6,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.springframework.stereotype.Component;
+import pl.edu.pjatk.LAB_2.exceptions.BrandNotFoundException;
 import pl.edu.pjatk.LAB_2.exceptions.CarAlreadyExistsException;
 import pl.edu.pjatk.LAB_2.exceptions.CarNotFoundExceptions;
 import pl.edu.pjatk.LAB_2.exceptions.CarWrongDataInputException;
@@ -33,11 +34,14 @@ public class CarService {
         this.brandRepository = brandRepository;
 
         add(new Car("RS6", "black", getOrCreateBrand("Audi"), 3.2, 2017, false, 670));
+        add(new Car("C63 AMG", "white", getOrCreateBrand("Mercedes"), 4.0, 2020, true, 720));
+        add(new Car("M5", "blue", getOrCreateBrand("BMW"), 4.4, 2019, false, 650));
+        add(new Car("Model S Plaid", "red", getOrCreateBrand("Tesla"), 3.0, 2021, false, 800));
     }
 
-    private Brand getOrCreateBrand(String brandName) {
-        Optional<Brand> brand = brandRepository.findByName(brandName);
-        return brand.orElseGet(() -> brandRepository.save(new Brand(brandName)));
+    public Brand getOrCreateBrand(String brandName) {
+        Optional<Brand> brand = brandRepository.findByName(stringUtilsService.toProperCase(brandName));
+        return brand.orElseGet(() -> brandRepository.save(new Brand(stringUtilsService.toProperCase(brandName))));
     }
 
     public List<Car> getCarByModel(String model) {
@@ -82,6 +86,23 @@ public class CarService {
         return car;
     }
 
+    public List<Car> getCarsByBrand(String brandName) {
+        Optional<Brand> brandOptional = this.brandRepository.findByName(stringUtilsService.toProperCase(brandName));
+        if(brandOptional.isEmpty()) throw new BrandNotFoundException();
+
+        Brand brand = brandOptional.get();
+
+        List<Car> cars = this.repository.findByBrand(brand);
+        if(cars.isEmpty()) throw new CarNotFoundExceptions();
+
+        for(Car car : cars) {
+            car.getBrand().setName(stringUtilsService.toProperCase(car.getBrand().getName()));
+            car.setModel(stringUtilsService.toProperCase(car.getModel()));
+            car.setColor(stringUtilsService.toProperCase(car.getColor()));
+        }
+        return cars;
+    }
+
     public void delete(Long id){
         Optional<Car> carOptional = this.repository.findById(id);
         if(carOptional.isEmpty()) throw new CarNotFoundExceptions();
@@ -101,7 +122,14 @@ public class CarService {
 
         carToUpdate.setModel(stringUtilsService.toProperCase(car.getModel()));
         carToUpdate.setColor(stringUtilsService.toProperCase(car.getColor()));
+        carToUpdate.setEngine(car.getEngine());
+        carToUpdate.setYear(car.getYear());
+        carToUpdate.setHorsePower(car.getHorsePower());
+        carToUpdate.setPostAccident(car.isPostAccident());
         carToUpdate.setCharToIntSum(car.getCharToIntSum());
+
+        Brand brand = car.getBrand();
+        carToUpdate.setBrand(getOrCreateBrand(brand.getName()));
 
         this.repository.save(carToUpdate);
     }

@@ -2,9 +2,11 @@ package pl.edu.pjatk.LAB_2.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 
 @Entity
+@JsonPropertyOrder({"id", "model", "brand", "color", "engine", "horsePower", "year", "postAccident", "charToIntSum"})
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -106,11 +108,21 @@ public class Car {
 
     public int getCharToIntSum() {
         charToIntSum = 0;
+        int intEngine = (int) (engine*10);
         for(int i = 0; i < model.length(); i++){
             charToIntSum += model.toLowerCase().charAt(i);
         }
         for(int i = 0; i < color.length(); i++){
             charToIntSum += color.toLowerCase().charAt(i);
+        }
+        charToIntSum += year;
+        charToIntSum += horsePower;
+        charToIntSum += intEngine;
+
+        if(postAccident){
+            charToIntSum += 1;
+        } else {
+            charToIntSum += 2;
         }
         return charToIntSum;
     }

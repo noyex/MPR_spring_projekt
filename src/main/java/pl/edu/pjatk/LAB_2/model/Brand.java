@@ -1,6 +1,7 @@
 package pl.edu.pjatk.LAB_2.model;
 
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class Brand {
         this.id = id;
     }
 
+    @JsonValue
     public String getName() {
         return name;
     }

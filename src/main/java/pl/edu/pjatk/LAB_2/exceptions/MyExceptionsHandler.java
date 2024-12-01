@@ -26,4 +26,9 @@ public class MyExceptionsHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleWrongInput(StringUtilsWrongInputException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(value = {BrandNotFoundException.class})
+    public ResponseEntity<Object> handleBrandNotFound(BrandNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
 }
