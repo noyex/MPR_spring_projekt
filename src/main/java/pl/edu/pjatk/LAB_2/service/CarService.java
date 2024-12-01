@@ -6,10 +6,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.springframework.stereotype.Component;
-import pl.edu.pjatk.LAB_2.exceptions.BrandNotFoundException;
-import pl.edu.pjatk.LAB_2.exceptions.CarAlreadyExistsException;
-import pl.edu.pjatk.LAB_2.exceptions.CarNotFoundExceptions;
-import pl.edu.pjatk.LAB_2.exceptions.CarWrongDataInputException;
+import pl.edu.pjatk.LAB_2.exceptions.*;
 import pl.edu.pjatk.LAB_2.model.Brand;
 import pl.edu.pjatk.LAB_2.model.Car;
 import pl.edu.pjatk.LAB_2.repository.BrandRepository;
@@ -18,6 +15,7 @@ import pl.edu.pjatk.LAB_2.repository.CarRepository;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -137,6 +135,9 @@ public class CarService {
     public void carWrongDataInputException(Car car){
         if(car.getModel() == null || car.getModel().isEmpty()) throw new CarWrongDataInputException();
         if(car.getColor() == null || car.getColor().isEmpty()) throw new CarWrongDataInputException();
+        if(car.getYear() > Calendar.getInstance().get(Calendar.YEAR) || car.getYear() < 1900) throw new CarWrongDataInputException();
+        if(car.getHorsePower() <= 0 || car.getHorsePower() > 2000) throw new CarWrongDataInputException();
+        if(car.getEngine() > 7 || car.getEngine() < 0.2) throw new CarWrongDataInputException();
     }
 
     public byte[] generatePDF(Long id) throws IOException {

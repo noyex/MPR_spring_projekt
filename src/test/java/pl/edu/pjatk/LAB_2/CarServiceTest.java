@@ -97,21 +97,58 @@ public class CarServiceTest {
         assertDoesNotThrow(() -> carService.add(car));
     }
     @Test
-    public void testAddCarWrongDataBoth_ThrowException() {
+    public void testAddCarAllDataWrong_ThrowException() {
         Car car = new Car("", "", null, 0, 0, true, 0);
         assertThrows(CarWrongDataInputException.class, () -> carService.add(car));
     }
     @Test
     public void testAddCarWrongDataModel_ThrowsException() {
-        Car car = new Car("RS6", "", null, 0, 0, true, 0);
+        Brand brand = new Brand();
+        Car car = new Car(null, "yellow", brand, 1.5, 2000, true, 100);
         assertThrows(CarWrongDataInputException.class, () -> carService.add(car));
     }
     @Test
     public void testAddCarWrongDataColor_ThrowsException() {
-        Car car = new Car("RS6", "", null, 0, 0, true, 0);
+        Brand brand = new Brand();
+        Car car = new Car("RS6", null, brand, 1.4, 2000, true, 100);
         assertThrows(CarWrongDataInputException.class, () -> carService.add(car));
     }
-    // dorobic wrong engine, year, possaccident, horsePower
+    @Test
+    public void testAddCarWrongDataEngineTooLow_ThrowsException() {
+        Brand brand = new Brand();
+        Car car = new Car("RS6", "yellow", brand, 0, 2000, true, 100);
+        assertThrows(CarWrongDataInputException.class, () -> carService.add(car));
+    }
+    @Test
+    public void testAddCarWrongDataEngineTooHigh_ThrowsException() {
+        Brand brand = new Brand();
+        Car car = new Car("RS6", "yellow", brand, 7.1, 2000, true, 100);
+        assertThrows(CarWrongDataInputException.class, () -> carService.add(car));
+    }
+    @Test
+    public void testAddCarWrongDataYearTooLow_ThrowsException() {
+        Brand brand = new Brand();
+        Car car = new Car("RS6", "yellow", brand, 1.2, 1899, true, 100);
+        assertThrows(CarWrongDataInputException.class, () -> carService.add(car));
+    }
+    @Test
+    public void testAddCarWrongDataYearTooHigh_ThrowsException() {
+        Brand brand = new Brand();
+        Car car = new Car("RS6", "yellow", brand, 1.2, 2025, true, 100);
+        assertThrows(CarWrongDataInputException.class, () -> carService.add(car));
+    }
+    @Test
+    public void testAddCarWrongDataHorsePowerTooLow_ThrowsException() {
+        Brand brand = new Brand();
+        Car car = new Car("RS6", "yellow", brand, 1.2, 2000, true, 0);
+        assertThrows(CarWrongDataInputException.class, () -> carService.add(car));
+    }
+    @Test
+    public void testAddCarWrongDataHorsePowerTooHigh_ThrowsException() {
+        Brand brand = new Brand();
+        Car car = new Car("RS6", "yellow", brand, 1.2, 2000, true, 2001);
+        assertThrows(CarWrongDataInputException.class, () -> carService.add(car));
+    }
 
     //getCarList test
     @Test
