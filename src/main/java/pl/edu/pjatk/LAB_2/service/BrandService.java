@@ -20,9 +20,7 @@ public class BrandService {
     public BrandService(BrandRepository brandRepository, StringUtilsService stringUtilsService) {
         this.brandRepository = brandRepository;
         this.stringUtilsService = stringUtilsService;
-        addBrandIfNotExists("Audi");
-        addBrandIfNotExists("Mercedes");
-        addBrandIfNotExists("Bmw");
+
 
     }
 
@@ -41,28 +39,27 @@ public class BrandService {
         }
         return brands;
     }
-//    public void removeDuplicateBrands() {
-//        List<Brand> brands = (List<Brand>) brandRepository.findAll();
-//
-//        Map<String, Brand> uniqueBrands = new HashMap<>();
-//
-//        List<Brand> duplicates = new ArrayList<>();
-//
-//        for (Brand brand : brands) {
-//            String name = brand.getName().toLowerCase();
-//            if (uniqueBrands.containsKey(name)) {
-//                duplicates.add(brand);
-//            } else {
-//                uniqueBrands.put(name, brand);
-//            }
-//        }
-//
-//        // Usuń wszystkie duplikaty z bazy danych
-//        if (!duplicates.isEmpty()) {
-//            brandRepository.deleteAll(duplicates);
-//            System.out.println("Usunięto duplikaty marek: " + duplicates.size());
-//        } else {
-//            System.out.println("Brak duplikatów do usunięcia.");
-//        }
-//    }
+    public void removeDuplicateBrands() {
+        List<Brand> brands = (List<Brand>) brandRepository.findAll();
+
+        Map<String, Brand> uniqueBrands = new HashMap<>();
+
+        List<Brand> duplicates = new ArrayList<>();
+
+        for (Brand brand : brands) {
+            String name = brand.getName().toLowerCase();
+            if (uniqueBrands.containsKey(name)) {
+                duplicates.add(brand);
+            } else {
+                uniqueBrands.put(name, brand);
+            }
+        }
+
+        if (!duplicates.isEmpty()) {
+            brandRepository.deleteAll(duplicates);
+            System.out.println("Usunięto duplikaty marek: " + duplicates.size());
+        } else {
+            System.out.println("Brak duplikatów do usunięcia.");
+        }
+    }
 }

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 
 @Entity
-@JsonPropertyOrder({"id", "model", "brand", "color", "engine", "horsePower", "year", "postAccident", "charToIntSum"})
+@JsonPropertyOrder({"id", "model", "brand", "price", "color", "engine", "horsePower", "year", "postAccident", "charToIntSum"})
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,6 +19,7 @@ public class Car {
     private Brand brand;
 
     private String model;
+    private double price;
     private String color;
     private double engine;
     private int horsePower;
@@ -32,9 +33,10 @@ public class Car {
 
     public Car(){}
 
-    public Car(String model, String color, Brand brand, double engine, int year, boolean postAccident, int horsePower) {
+    public Car(String model, String color, Brand brand, double price, double engine, int year, boolean postAccident, int horsePower) {
         this.model = model;
         this.color = color;
+        this.price = price;
         this.brand = brand;
         this.engine = engine;
         this.horsePower = horsePower;
@@ -56,6 +58,14 @@ public class Car {
 
     public void setModel(String model) {
         this.model = model;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public String getColor() {

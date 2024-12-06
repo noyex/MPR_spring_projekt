@@ -80,7 +80,7 @@ public class CarServiceTest {
         assertThrows(CarWrongDataInputException.class, () -> carService.getCarByModel(""));
     }
 
-//    // add car test
+// add car test
     @Test
     public void testAddCarSuccess_DoesNotThrowsException() {
         Brand brand = new Brand();
@@ -177,7 +177,7 @@ public class CarServiceTest {
         assertThrows(CarNotFoundExceptions.class, () -> carService.getCarList());
     }
 
-//    //checkIfCarExists test
+//checkIfCarExists test
     @Test
     void testCheckIfCarExists_ThrowsException() {
         Car car = new Car("rs6", "black", null, 0, 0, true, 0);
@@ -195,10 +195,35 @@ public class CarServiceTest {
         assertDoesNotThrow(()-> carService.checkIfCarExists(car));
     }
 
+    // getCarByBrand test
+//    @Test
+//    void testGetCarListByBrandSuccess() {
+//        Brand brand = new Brand("Audi");
+//
+//        Car car1 = new Car("carModel1", "carColor1", brand, 1.2, 2000, true, 100);
+//        Car car2 = new Car("carModel2", "carColor2", brand, 1.4, 2002, true, 100);
+//
+//        when(stringUtilsService.toProperCase("Audi")).thenReturn("Audi");
+//        when(brandRepository.findByName("Audi")).thenReturn(Optional.of(brand));
+//        when(repository.findByBrand(brand)).thenReturn(Arrays.asList(car1, car2));
+//
+//        List<Car> carList = carService.getCarsByBrand("Audi");
+//
+//        assertNotNull(carList, "Car list should not be null");
+//        assertEquals(2, carList.size(), "Car list should contain 2 cars");
+//        assertEquals("carModel1", carList.get(0).getModel());
+//        assertEquals("carModel2", carList.get(1).getModel());
+//        assertEquals("carColor1", carList.get(0).getColor());
+//        assertEquals("carColor2", carList.get(1).getColor());
+//
+//        verify(brandRepository, times(1)).findByName("Audi");
+//        verify(repository, times(1)).findByBrand(brand);
+//    }
+
 //    //getCar test
     @Test
     void testGetCarSuccess_DoesNotThrowException(){
-        Car car = new Car("carModel1", "carColor1", null, 0, 0, true, 0);
+        Car car = new Car("carModel1", "carColor1", null, 1.4, 2000, true, 80);
 
         when(repository.findById(1L)).thenReturn(Optional.of(car));
         when(stringUtilsService.toProperCase(car.getModel())).thenReturn("Carmodel1");
@@ -238,7 +263,7 @@ public class CarServiceTest {
     void testUpdateCarSuccess_DoesNotThrowException() {
         Long id = 1L;
         Brand brand = new Brand("Audi");
-        Car car = new Car("carModel1", "carColor1", brand, 0, 0, true, 0);
+        Car car = new Car("carModel1", "carColor1", brand, 1.4, 2000, true, 120);
         when(repository.findById(1L)).thenReturn(Optional.of(car));
         when(stringUtilsService.toProperCase(car.getModel())).thenReturn("Carmodel");
         when(stringUtilsService.toProperCase(car.getColor())).thenReturn("Carcolor");
@@ -249,7 +274,7 @@ public class CarServiceTest {
     @Test
     void testUpdateCarNotFound_ThrowsException() {
         when(repository.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(CarNotFoundExceptions.class, () -> carService.update(1L,new Car("carModel1", "carColor1", null, 0, 0, true, 0)));
+        assertThrows(CarNotFoundExceptions.class, () -> carService.update(1L,new Car("carModel1", "carColor1", null, 1.2, 2000, true, 100)));
     }
     @Test
     void testUpdateCarAlreadyExists_ThrowsException() {

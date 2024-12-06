@@ -10,6 +10,7 @@ import pl.edu.pjatk.LAB_2.model.Brand;
 import pl.edu.pjatk.LAB_2.model.Car;
 import pl.edu.pjatk.LAB_2.service.BrandService;
 import pl.edu.pjatk.LAB_2.service.CarService;
+import pl.edu.pjatk.LAB_2.service.StringUtilsService;
 
 import java.io.IOException;
 import java.security.PublicKey;
@@ -20,22 +21,24 @@ import java.util.List;
 public class MyRestController {
     private final CarService carService;
     private final BrandService brandService;
+    private final StringUtilsService stringUtilsService;
 
     @Autowired
-    public MyRestController(CarService carService, BrandService brandService) {
+    public MyRestController(CarService carService, BrandService brandService, StringUtilsService stringUtilsService) {
         this.carService = carService;
         this.brandService = brandService;
+        this.stringUtilsService = stringUtilsService;
     }
 
-//    @GetMapping("/brands/remove-duplicates")
-//    public ResponseEntity<String> removeDuplicates() {
-//        brandService.removeDuplicateBrands();
-//        return ResponseEntity.ok("Duplikaty zostały usunięte.");
-//    }
+    @GetMapping("car/brand/remove-duplicates")
+    public ResponseEntity<String> removeDuplicates() {
+        brandService.removeDuplicateBrands();
+        return ResponseEntity.ok("Duplikaty zostały usunięte.");
+    }
 
     @GetMapping("car/model/{model}")
     public ResponseEntity<List<Car>> getByModel(@PathVariable String model) {
-        return new ResponseEntity<>(this.carService.getCarByModel(model), HttpStatus.OK);
+        return new ResponseEntity<>(this.carService.getCarByModel(stringUtilsService.toProperCase(model)), HttpStatus.OK);
     }
 
     @GetMapping("car/all")  // <-- endpoint

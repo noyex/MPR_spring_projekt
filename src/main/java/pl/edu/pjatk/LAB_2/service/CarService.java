@@ -31,10 +31,10 @@ public class CarService {
         this.stringUtilsService = stringUtilsService;
         this.brandRepository = brandRepository;
 
-        add(new Car("RS6", "black", getOrCreateBrand("Audi"), 3.2, 2017, false, 670));
-        add(new Car("C63 AMG", "white", getOrCreateBrand("Mercedes"), 4.0, 2020, true, 720));
-        add(new Car("M5", "blue", getOrCreateBrand("BMW"), 4.4, 2019, false, 650));
-        add(new Car("Model S Plaid", "red", getOrCreateBrand("Tesla"), 3.0, 2021, false, 800));
+        add(new Car("RS6", "black", getOrCreateBrand("Audi"), 210000 ,3.2, 2017, false, 670));
+        add(new Car("C63 AMG", "white", getOrCreateBrand("Mercedes"), 60000,4.0, 2020, true, 720));
+        add(new Car("M5", "blue", getOrCreateBrand("BMW"),650000 ,4.4, 2019, false, 650));
+        add(new Car("Model S Plaid", "red", getOrCreateBrand("Tesla"),185000 ,3.0, 2021, false, 800));
     }
 
     public Brand getOrCreateBrand(String brandName) {
@@ -68,9 +68,21 @@ public class CarService {
 
     public void add(Car car) {
         carWrongDataInputException(car);
+
+        car.setBrand(getOrCreateBrand(car.getBrand().getName()));
         checkIfCarExists(car);
+
         car.setModel(stringUtilsService.toProperCase(car.getModel()));
         car.setColor(stringUtilsService.toProperCase(car.getColor()));
+
+        car.setHorsePower(car.getHorsePower());
+        car.setPostAccident(car.isPostAccident());
+        car.setYear(car.getYear());
+        car.setEngine(car.getEngine());
+        car.setPrice(car.getPrice());
+
+        car.setCharToIntSum(car.getCharToIntSum());
+
         this.repository.save(car);
     }
 
@@ -125,6 +137,7 @@ public class CarService {
         carToUpdate.setHorsePower(car.getHorsePower());
         carToUpdate.setPostAccident(car.isPostAccident());
         carToUpdate.setCharToIntSum(car.getCharToIntSum());
+        carToUpdate.setPrice(car.getPrice());
 
         Brand brand = car.getBrand();
         carToUpdate.setBrand(getOrCreateBrand(brand.getName()));
@@ -138,6 +151,7 @@ public class CarService {
         if(car.getYear() > Calendar.getInstance().get(Calendar.YEAR) || car.getYear() < 1900) throw new CarWrongDataInputException();
         if(car.getHorsePower() <= 0 || car.getHorsePower() > 2000) throw new CarWrongDataInputException();
         if(car.getEngine() > 7 || car.getEngine() < 0.2) throw new CarWrongDataInputException();
+        if(car.getPrice() < 300 || car.getPrice() > 5000000) throw new CarWrongDataInputException();
     }
 
     public byte[] generatePDF(Long id) throws IOException {
@@ -153,40 +167,56 @@ public class CarService {
             doc.addPage(page);
 
             try (PDPageContentStream contentStream = new PDPageContentStream(doc, page)) {
+
                 contentStream.setLineWidth(1f);
 
-                contentStream.setNonStrokingColor(Color.LIGHT_GRAY);
-                contentStream.addRect(50, 720, 500, 50);
+                contentStream.setNonStrokingColor(Color.DARK_GRAY);
+                contentStream.addRect(50, 750, 500, 50);
                 contentStream.fill();
-
+                contentStream.setNonStrokingColor(Color.WHITE);
 
                 contentStream.beginText();
-                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 16);
-                contentStream.setNonStrokingColor(0, 0, 0);
-                contentStream.newLineAtOffset(50, 750);
-                contentStream.showText("Ownership Certificate");
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 18);
+                contentStream.newLineAtOffset(250, 770);
+                contentStream.showText("Car Dealership");
                 contentStream.endText();
 
+                contentStream.setNonStrokingColor(0, 0, 0);
+                contentStream.beginText();
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 16);
+                contentStream.newLineAtOffset(100, 680);
+                contentStream.showText(car.getBrand().getName() + " " + car.getModel() + " " + car.getYear());
+                contentStream.endText();
+
+                contentStream.setStrokingColor(0, 0, 0);
+                contentStream.moveTo(50, 670);
+                contentStream.lineTo(550, 670);
+                contentStream.stroke();
 
                 contentStream.beginText();
                 contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN), 12);
                 contentStream.setLeading(14.5f);
-                contentStream.newLineAtOffset(50, 700);
+                contentStream.newLineAtOffset(50, 650);
 
-                contentStream.showText("Model: " + car.getModel());
+                contentStream.showText("Price: " + car.getPrice());
+                contentStream.newLine();
+                contentStream.showText("Horse Power: " + car.getHorsePower());
+                contentStream.newLine();
+                contentStream.showText("Engine: " + car.getEngine());
+                contentStream.newLine();
+                contentStream.showText("Post accident: " + car.isPostAccident());
                 contentStream.newLine();
                 contentStream.showText("Color: " + car.getColor());
                 contentStream.newLine();
 
-                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_OBLIQUE), 12);
-                contentStream.showText("Thank you for choosing our dealership!");
-
                 contentStream.endText();
 
-                contentStream.setStrokingColor(0, 0, 0);
-                contentStream.moveTo(50, 735);
-                contentStream.lineTo(550, 735);
-                contentStream.stroke();
+                contentStream.setNonStrokingColor(Color.GRAY);
+                contentStream.beginText();
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_OBLIQUE), 12);
+                contentStream.newLineAtOffset(50, 50);
+                contentStream.showText("Thank you for choosing our dealership!");
+                contentStream.endText();
             }
 
             doc.save(byteArrayOutputStream);
