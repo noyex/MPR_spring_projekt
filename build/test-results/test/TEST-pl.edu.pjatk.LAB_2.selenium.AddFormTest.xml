@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="pl.edu.pjatk.LAB_2.selenium.AddFormTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-12-09T13:55:31" hostname="MacBook-Air-Mikoaj.local" time="2.697">
+  <properties/>
+  <testcase name="testAddForm()" classname="pl.edu.pjatk.LAB_2.selenium.AddFormTest" time="2.697"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

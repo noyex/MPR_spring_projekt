@@ -2,26 +2,57 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Car Dealership</title>
 </head>
 <body>
-<table>
+<h1>Car Dealership</h1>
+
+<form th:action="@{/view/search}" method="get">
+    <input type="text" name="query" placeholder="Search by brand or model" required>
+    <button type="submit">Search</button>
+</form>
+
+<a href="/view/addForm">
+    <button>Add New Car</button>
+</a>
+
+<a href="/view/all">
+    <button>All cars</button>
+</a>
+
+
+<table border="1">
+    <thead>
     <tr>
-        <td>Model</td>
-        <td>Color</td>
-        <td>Engine</td>
-        <td>Horse_Power</td>
-        <td>Post_accident?</td>
-        <td>Brand</td>
+        <th>ID</th>
+        <th>Model</th>
+        <th>Brand</th>
+        <th>Year</th>
+        <th>Engine</th>
+        <th>Horse Power</th>
+        <th>Post Accident</th>
+        <th>Actions</th>
     </tr>
+    </thead>
+    <tbody>
     <tr th:each="car : ${carList}">
+        <td th:text="${car.id}"></td>
         <td th:text="${car.model}"></td>
-        <td th:text="${car.color}"></td>
+        <td th:text="${car.brand.name}"></td>
+        <td th:text="${car.year}"></td>
         <td th:text="${car.engine}"></td>
         <td th:text="${car.horsePower}"></td>
-        <td th:text="${car.postAccident}"></td>
-        <td th:text="${car.getBrand().getName()}"></td>
+        <td th:text="${car.postAccident ? 'Yes' : 'No'}"></td>
+        <td>
+            <a th:href="@{/view/update/{id}(id=${car.id})}">
+                <button>Update</button>
+            </a>
+            <a th:href="@{/view/delete/{id}(id=${car.id})}">
+                <button>Delete</button>
+            </a>
+        </td>
     </tr>
+    </tbody>
 </table>
 </body>
 </html>

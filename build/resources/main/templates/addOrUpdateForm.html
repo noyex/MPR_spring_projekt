@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add or Update Car</title>
+</head>
+<body>
+<h1 th:text="${car.id == null ? 'Add New Car' : 'Edit Car'}"></h1>
+<form th:action="@{/view/save}" th:object="${car}" method="post">
+    <input type="hidden" th:field="*{id}" />
+
+    <label for="model">Model:</label>
+    <input id="model" type="text" th:field="*{model}" required /><br>
+
+    <label for="brand">Brand:</label>
+    <input id="brand" type="text" th:field="*{brand.name}" required /><br>
+
+    <label for="price">Price:</label>
+    <input id="price" type="text" th:field="*{price}" required /><br>
+
+    <label for="color">Color:</label>
+    <input id="color" type="text" th:field="*{color}" required /><br>
+
+    <label for="engine">Engine:</label>
+    <input id="engine" type="text" th:field="*{engine}" required /><br>
+
+    <label for="horsePower">Horse Power:</label>
+    <input id="horsePower" type="text" th:field="*{horsePower}" required /><br>
+
+    <label for="year">Year:</label>
+    <input id="year" type="number" th:field="*{year}" required /><br>
+
+    <label for="postAccident">Post Accident:</label>
+    <select id="postAccident" th:field="*{postAccident}">
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+    </select><br>
+
+    <button type="submit">Save</button>
+</form>
+</body>
+</html>
